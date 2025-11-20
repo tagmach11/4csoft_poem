@@ -679,8 +679,8 @@ body::before {
 }
 
 .submit-btn:active {
-    background: #FF7A2D;
-    box-shadow: 0 2px 8px rgba(255, 138, 61, 0.25);
+    background: #1D4ED8;
+    box-shadow: 0 2px 8px rgba(29, 78, 216, 0.3);
     transform: translateY(0);
 }
 

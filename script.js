@@ -1,5 +1,10 @@
-// EmailJS 초기화 (사용자가 설정한 Public Key로 변경 필요)
-// emailjs.init("YOUR_PUBLIC_KEY"); // EmailJS 대시보드에서 발급받은 Public Key 입력
+// EmailJS 설정
+const EMAILJS_CONFIG = {
+    serviceID: 'service_5u6ktz4',
+    templateID: 'template_3a9czho',
+    publicKey: 'Az3XOt1U8hcC9WoRY',
+    toEmail: 'leo4@4csoft.com'
+};
 
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('contactForm');
@@ -344,9 +349,18 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.setItem(formKey, now);
     }
     
+    // 폼 제출 중복 방지 플래그
+    let isSubmitting = false;
+    
     // 폼 제출 처리
     form.addEventListener('submit', function(e) {
         e.preventDefault();
+        
+        // 이미 제출 중이면 무시
+        if (isSubmitting) {
+            console.log('이미 제출 중입니다. 중복 제출을 방지합니다.');
+            return;
+        }
         
         let isValid = true;
         
@@ -406,6 +420,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         if (isValid) {
+            // 제출 시작 - 플래그 설정 및 버튼 비활성화
+            isSubmitting = true;
+            if (submitButton) {
+                submitButton.disabled = true;
+                submitButton.textContent = '전송 중...';
+                submitButton.style.opacity = '0.6';
+                submitButton.style.cursor = 'not-allowed';
+            }
+            
             // 폼 데이터 해시 생성
             const formHash = generateFormHash(firstName, lastName, email, company);
             
@@ -413,7 +436,14 @@ document.addEventListener('DOMContentLoaded', function() {
             const rateLimitCheck = checkAllRateLimits(email, formHash);
             
             if (!rateLimitCheck.allowed) {
-                // 제한에 걸린 경우
+                // 제한에 걸린 경우 - 플래그 해제 및 버튼 복원
+                isSubmitting = false;
+                if (submitButton) {
+                    submitButton.disabled = false;
+                    submitButton.textContent = '도입 문의하기';
+                    submitButton.style.opacity = '1';
+                    submitButton.style.cursor = 'pointer';
+                }
                 const limitType = rateLimitCheck.type || 'general';
                 showRateLimitModal(rateLimitCheck.remainingMinutes, limitType);
                 return;
@@ -479,28 +509,69 @@ document.addEventListener('DOMContentLoaded', function() {
             };
             
             // 이메일 전송 시도
-            if (typeof emailjs !== 'undefined' && serviceID !== 'YOUR_SERVICE_ID') {
-                emailjs.send(serviceID, templateID, emailParams)
-                    .then(function(response) {
-                        console.log('이메일 전송 성공!', response.status, response.text);
-                        // 제출 시간 저장 (이메일, 브라우저, 폼 데이터 해시 모두)
-                        saveSubmitTime(email, formHash);
-                        showModal('successModal');
-                        form.reset();
-                        resetForm();
-                    }, function(error) {
-                        console.error('이메일 전송 실패:', error);
-                        showModal('errorModal');
-                    });
-            } else {
-                // EmailJS 설정이 안 되어 있을 경우 기본 동작
-                console.log('Form submitted:', formData);
-                // 제출 시간 저장 (이메일, 브라우저, 폼 데이터 해시 모두)
-                saveSubmitTime(email, formHash);
-                showModal('successModal');
-                form.reset();
-                resetForm();
+            console.log('EmailJS 설정 확인:', {
+                emailjs: typeof emailjs !== 'undefined',
+                serviceID: serviceID,
+                templateID: templateID,
+                publicKey: publicKey ? '설정됨' : '없음',
+                emailParams: emailParams
+            });
+            
+            if (typeof emailjs === 'undefined') {
+                console.error('EmailJS 라이브러리가 로드되지 않았습니다.');
+                alert('이메일 전송 기능을 사용할 수 없습니다. 페이지를 새로고침해주세요.');
+                return;
             }
+            
+            if (serviceID === 'YOUR_SERVICE_ID' || templateID === 'YOUR_TEMPLATE_ID' || publicKey === 'YOUR_PUBLIC_KEY') {
+                console.error('EmailJS 설정이 완료되지 않았습니다.');
+                alert('이메일 설정이 완료되지 않았습니다. 관리자에게 문의해주세요.');
+                return;
+            }
+            
+            // EmailJS v4에서는 publicKey를 send 메서드에 직접 전달
+            // 또는 초기화가 필요 없을 수 있음
+            // 이메일 전송
+            emailjs.send(serviceID, templateID, emailParams, publicKey)
+                .then(function(response) {
+                    console.log('이메일 전송 성공!', response.status, response.text);
+                    // 제출 시간 저장 (이메일, 브라우저, 폼 데이터 해시 모두)
+                    saveSubmitTime(email, formHash);
+                    showModal('successModal');
+                    form.reset();
+                    resetForm();
+                    // 제출 완료 - 플래그 해제 및 버튼 복원
+                    isSubmitting = false;
+                    if (submitButton) {
+                        submitButton.disabled = false;
+                        submitButton.textContent = '도입 문의하기';
+                        submitButton.style.opacity = '1';
+                        submitButton.style.cursor = 'pointer';
+                    }
+                })
+                .catch(function(error) {
+                    console.error('이메일 전송 실패:', error);
+                    console.error('에러 상세:', {
+                        status: error.status,
+                        text: error.text,
+                        message: error.message
+                    });
+                    // 더 자세한 에러 메시지 표시
+                    let errorMessage = '문의 접수 중 오류가 발생했습니다.';
+                    if (error.text) {
+                        errorMessage += '<br>' + error.text;
+                    }
+                    document.querySelector('#errorModal .modal-message').innerHTML = errorMessage;
+                    showModal('errorModal');
+                    // 제출 실패 - 플래그 해제 및 버튼 복원
+                    isSubmitting = false;
+                    if (submitButton) {
+                        submitButton.disabled = false;
+                        submitButton.textContent = '도입 문의하기';
+                        submitButton.style.opacity = '1';
+                        submitButton.style.cursor = 'pointer';
+                    }
+                });
         }
     });
     
@@ -550,25 +621,27 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (limitType === 'email') {
                 message = remainingMinutes > 0 
-                    ? `같은 이메일 주소로는 1시간에 한 번만 문의하실 수 있습니다.\n약 ${remainingMinutes}분 후에 다시 시도해주세요.`
+                    ? `같은 이메일 주소로는 1시간에 한 번만 문의하실 수 있습니다.<br>약 ${remainingMinutes}분 후에 다시 시도해주세요.`
                     : '같은 이메일 주소로는 1시간에 한 번만 문의하실 수 있습니다.';
             } else if (limitType === 'browser') {
                 message = remainingMinutes > 0
-                    ? `이 브라우저에서는 1시간에 한 번만 문의하실 수 있습니다.\n약 ${remainingMinutes}분 후에 다시 시도해주세요.`
+                    ? `이 브라우저에서는 1시간에 한 번만 문의하실 수 있습니다.<br>약 ${remainingMinutes}분 후에 다시 시도해주세요.`
                     : '이 브라우저에서는 1시간에 한 번만 문의하실 수 있습니다.';
             } else if (limitType === 'form') {
                 message = remainingMinutes > 0
-                    ? `같은 정보로는 1시간에 한 번만 문의하실 수 있습니다.\n약 ${remainingMinutes}분 후에 다시 시도해주세요.`
+                    ? `같은 정보로는 1시간에 한 번만 문의하실 수 있습니다.<br>약 ${remainingMinutes}분 후에 다시 시도해주세요.`
                     : '같은 정보로는 1시간에 한 번만 문의하실 수 있습니다.';
             } else {
                 message = remainingMinutes > 0
-                    ? `1시간에 한 번만 문의하실 수 있습니다.\n약 ${remainingMinutes}분 후에 다시 시도해주세요.`
+                    ? `1시간에 한 번만 문의하실 수 있습니다.<br>약 ${remainingMinutes}분 후에 다시 시도해주세요.`
                     : '1시간에 한 번만 문의하실 수 있습니다.';
             }
             
-            messageEl.textContent = message;
+            messageEl.innerHTML = message;
             modal.classList.add('show');
             document.body.style.overflow = 'hidden';
+        } else {
+            console.error('rateLimitModal 또는 rateLimitMessage 요소를 찾을 수 없습니다.');
         }
     };
     

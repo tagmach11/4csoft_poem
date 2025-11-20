@@ -318,6 +318,21 @@
         </div>
     </div>
     
+    <!-- 제한 모달 -->
+    <div id="rateLimitModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-icon warning">
+                <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="24" cy="24" r="24" fill="#FF9500" opacity="0.1"/>
+                    <path d="M24 4C12.95 4 4 12.95 4 24C4 35.05 12.95 44 24 44C35.05 44 44 35.05 44 24C44 12.95 35.05 4 24 4ZM26 32H22V28H26V32ZM26 24H22V14H26V24Z" fill="#FF9500"/>
+                </svg>
+            </div>
+            <h2 class="modal-title">잠시만 기다려주세요</h2>
+            <p class="modal-message" id="rateLimitMessage"></p>
+            <button class="modal-button" onclick="closeModal('rateLimitModal')">확인</button>
+        </div>
+    </div>
+    
     <script src="script.js"></script>
 </body>
 </html>

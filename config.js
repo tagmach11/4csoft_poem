@@ -5,7 +5,7 @@
 const EMAILJS_CONFIG = {
     serviceID: 'service_5u6ktz4',
     templateID: 'template_3a9czho',
-    publicKey: '-isvxBOOe0tvbw7Di',
+    publicKey: 'Az3XOt1U8hcC9WoRY',
     toEmail: 'leo4@4csoft.com'
 };
 
