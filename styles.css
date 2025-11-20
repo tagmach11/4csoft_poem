@@ -185,8 +185,9 @@ body::before {
     display: flex;
     gap: 36px;
     align-items: center;
-    animation: slide 8s linear infinite;
+    animation: slide 45s linear infinite;
     will-change: transform;
+    width: fit-content;
 }
 
 .partner-logo {
@@ -218,7 +219,7 @@ body::before {
         transform: translateX(0);
     }
     100% {
-        transform: translateX(-50%);
+        transform: translateX(calc(-50% - 18px));
     }
 }
 
@@ -621,7 +622,7 @@ body::before {
     color: #1A1A1A;
     letter-spacing: -0.01em;
     font-weight: 400;
-    background: #FFFFFF;
+    background: transparent;
     padding: 0;
     margin: 0;
 }
@@ -710,19 +711,20 @@ body::before {
     .left-section {
         width: 100%;
         flex: 0 0 auto;
-        padding: 60px 40px;
+        padding: 50px 32px;
         min-height: auto;
-        margin-left: 30px;
+        margin-left: 0;
     }
     
     .right-section {
         width: 100%;
         flex: 0 0 auto;
-        padding: 60px 40px;
+        padding: 50px 32px;
     }
     
     .headline {
-        font-size: 48px;
+        font-size: 42px;
+        margin-bottom: 20px;
     }
     
     .subheadline {
@@ -731,22 +733,33 @@ body::before {
     
     .features li {
         font-size: 16px;
+        margin-bottom: 18px;
+    }
+    
+    .testimonial {
+        width: 100%;
+        max-width: 100%;
     }
     
     .testimonial-text {
         font-size: 16px;
     }
     
+    .partner-logos-container {
+        max-width: 100%;
+    }
+    
     .partner-logos-track {
         gap: 32px;
+        animation: slide 40s linear infinite;
     }
     
     .partner-logo {
-        height: 50px;
+        height: 55px;
     }
     
     .partner-logo img {
-        max-height: 50px;
+        max-height: 55px;
         max-width: 150px;
     }
     
@@ -757,6 +770,22 @@ body::before {
     .top-logo {
         top: 24px;
         left: 32px;
+    }
+    
+    .action-buttons-container {
+        flex-direction: row;
+        gap: 16px;
+        flex-wrap: wrap;
+    }
+    
+    .action-btn {
+        flex: 1;
+        min-width: 200px;
+    }
+    
+    .contact-info {
+        flex-direction: row;
+        flex-wrap: wrap;
     }
 }
 
@@ -775,57 +804,122 @@ body::before {
     }
     
     .container {
-        padding: 0 24px 40px;
-        gap: 60px;
+        padding: 0;
+        gap: 0;
+        flex-direction: column;
+    }
+    
+    .left-section {
+        width: 100%;
+        flex: 0 0 auto;
+        padding: 40px 24px;
+        min-height: auto;
+        margin-left: 0;
+        display: contents;
+    }
+    
+    .right-section {
+        width: 100%;
+        flex: 0 0 auto;
+        padding: 40px 24px;
+        order: 3;
     }
     
     .headline {
-        font-size: 36px;
-        margin-bottom: 32px;
+        font-size: 32px;
+        margin-bottom: 24px;
+        line-height: 1.2;
+        order: 1;
+        width: 100%;
+        padding: 0 24px;
     }
     
     .features {
-        margin-bottom: 48px;
+        margin-bottom: 32px;
+        order: 2;
+        width: 100%;
+        padding: 0 24px;
     }
     
     .features li {
-        font-size: 16px;
-        margin-bottom: 16px;
+        font-size: 15px;
+        margin-bottom: 14px;
     }
     
     .testimonial {
-        margin-top: 40px;
+        margin-top: 32px;
+        width: 100%;
+        max-width: 100%;
+        order: 4;
+        padding: 0 24px;
     }
     
     .testimonial-text {
-        font-size: 15px;
+        font-size: 14px;
+    }
+    
+    .partner-logos-container {
+        max-width: 100%;
+        margin-top: 20px;
     }
     
     .partner-logos-track {
         gap: 24px;
+        animation: slide 35s linear infinite;
     }
     
     .partner-logo {
-        height: 40px;
+        height: 45px;
     }
     
     .partner-logo img {
-        max-height: 40px;
+        max-height: 45px;
         max-width: 120px;
     }
     
     .contact-form {
         padding: 32px 24px;
+        max-width: 100%;
     }
     
     .form-group {
-        margin-bottom: 28px;
+        margin-bottom: 24px;
     }
     
     .form-row {
         grid-template-columns: 1fr;
+        gap: 0;
     }
     
+    .form-row .form-group {
+        margin-bottom: 24px;
+    }
+    
+    .action-buttons-container {
+        flex-direction: column;
+        gap: 12px;
+        margin-top: 32px;
+        order: 5;
+        width: 100%;
+        padding: 0 24px;
+    }
+    
+    .action-btn {
+        width: 100%;
+        max-width: 100%;
+        justify-content: center;
+        padding: 14px 24px;
+    }
+    
+    .contact-info {
+        flex-direction: column;
+        gap: 16px;
+        margin-top: 24px;
+        align-items: flex-start;
+        order: 6;
+        width: 100%;
+        padding: 0 24px;
+    }
     
     .privacy-group {
         padding: 20px;
@@ -847,6 +941,79 @@ body::before {
     
     .logo-image {
         height: 28px;
+    }
+}
+
+@media (max-width: 480px) {
+    .left-section {
+        padding: 32px 20px;
+    }
+    
+    .right-section {
+        padding: 32px 20px;
+    }
+    
+    .headline {
+        font-size: 28px;
+        margin-bottom: 20px;
+    }
+    
+    .features li {
+        font-size: 14px;
+        margin-bottom: 12px;
+    }
+    
+    .contact-form {
+        padding: 24px 20px;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        font-size: 13px;
+    }
+    
+    .form-group input[type="text"],
+    .form-group input[type="email"],
+    .form-group input[type="tel"],
+    .form-textarea {
+        font-size: 14px;
+        padding: 10px 14px;
+    }
+    
+    .submit-btn {
+        padding: 14px 20px;
+        font-size: 15px;
+    }
+    
+    .partner-logos-track {
+        gap: 20px;
+        animation: slide 30s linear infinite;
+    }
+    
+    .partner-logo {
+        height: 40px;
+    }
+    
+    .partner-logo img {
+        max-height: 40px;
+        max-width: 100px;
+    }
+    
+    .action-btn {
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+    
+    .contact-info {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .contact-item {
+        font-size: 15px;
     }
 }
 
