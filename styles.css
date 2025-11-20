@@ -860,7 +860,7 @@ body::before {
         max-width: 90%;
     }
     
-    .modal-title {
+    .modal-title {  
         font-size: 20px;
     }
     
@@ -877,6 +877,131 @@ body::before {
     .modal-icon svg {
         width: 40px;
         height: 40px;
+    }
+}
+
+/* Action Buttons */
+.action-buttons-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 16px;
+    padding: 0;
+    margin-top: 32px;
+    position: relative;
+    z-index: 1;
+}
+
+.action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    letter-spacing: -0.01em;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.action-btn svg {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+}
+
+.brochure-btn {
+    background: #1B2C48;
+    color: #FFFFFF;
+    border: none;
+}
+
+.brochure-btn:hover {
+    background: #2A3D5A;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(27, 44, 72, 0.2);
+}
+
+.demo-btn {
+    background: #FFFFFF;
+    color: #1B2C48;
+    border: 1px solid #E5E8EB;
+}
+
+.demo-btn:hover {
+    background: #F9FAFB;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    border-color: #D1DAE5;
+}
+
+@media (max-width: 1024px) {
+    .action-buttons-container {
+        padding: 32px 40px;
+    }
+}
+
+@media (max-width: 768px) {
+    .action-buttons-container {
+        flex-direction: column;
+        padding: 32px 24px;
+        gap: 12px;
+    }
+    
+    .action-btn {
+        width: 100%;
+        max-width: 400px;
+        justify-content: center;
+    }
+}
+
+/* Contact Info */
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid #E5E8EB;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #6B7280;
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.2s;
+    letter-spacing: -0.01em;
+}
+
+.contact-item:hover {
+    color: #4F7BFF;
+}
+
+.contact-item svg {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    color: #9CA3AF;
+    transition: color 0.2s;
+}
+
+.contact-item:hover svg {
+    color: #4F7BFF;
+}
+
+@media (max-width: 768px) {
+    .contact-info {
+        margin-top: 20px;
+        padding-top: 20px;
+    }
+    
+    .contact-item {
+        font-size: 18px;
     }
 }
 
